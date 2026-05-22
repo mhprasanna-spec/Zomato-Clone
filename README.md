@@ -223,7 +223,7 @@ pipeline {
         stage('Checkout from Git') {
             steps {
                 git branch: 'main',
-                url: 'https://github.com/mudit097/Zomato-Clone.git'
+                url: 'https://github.com/mhprasanna-spec/Zomato-Clone.git'
             }
         }
 
@@ -273,8 +273,8 @@ pipeline {
                 script {
                     withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
                         sh 'docker build -t zomato .'
-                        sh 'docker tag zomato yourdockerhub/zomato:latest'
-                        sh 'docker push yourdockerhub/zomato:latest'
+                        sh 'docker tag zomato prasanna369/zomato:latest'
+                        sh 'docker push prasanna369/zomato:latest'
                     }
                 }
             }
@@ -282,7 +282,7 @@ pipeline {
 
         stage('TRIVY Image Scan') {
             steps {
-                sh 'trivy image yourdockerhub/zomato:latest > trivy-image.txt'
+                sh 'trivy image prasanna369/zomato:latest > trivy-image.txt'
             }
         }
 
@@ -292,7 +292,7 @@ pipeline {
                 docker run -d \
                   --name zomato \
                   -p 3000:3000 \
-                  yourdockerhub/zomato:latest
+                  prasanna369/zomato:latest
                 '''
             }
         }
