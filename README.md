@@ -1,137 +1,373 @@
-# 🍽️ **Zomato Clone: Secure Deployment with DevSecOps CI/CD**  
+# Zomato Clone — Secure Deployment with DevSecOps CI/CD
 
-![Zomato Clone](https://miro.medium.com/v2/resize:fit:1400/format:webp/1*X_hm5iF0NRjbOZHB6RQIFA.jpeg)  
+## 📌 Project Overview
 
-🚀 **A full-stack Zomato Clone with DevSecOps integration for a secure and scalable deployment.**  
+This project demonstrates a complete **DevSecOps CI/CD pipeline** for deploying a Zomato Clone application using Jenkins, SonarQube, OWASP Dependency Check, Trivy, Docker, and AWS EC2.
 
-This **Zomato Clone: Secure Deployment with DevSecOps CI/CD** repository is a **full-stack food delivery application** inspired by Zomato. It includes a **React.js frontend** and integrates DevSecOps practices to ensure a secure and automated deployment pipeline.  
+The main objective is to automate:
+- Code checkout from GitHub
+- Static code analysis (SonarQube)
+- Dependency vulnerability scanning (OWASP)
+- Filesystem & container image scanning (Trivy)
+- Docker image build and push to DockerHub
+- Automated application deployment on AWS EC2
 
-## 🔹 **Key Features:**  
-
-✅ **User-friendly UI** – Interactive menu, checkout, and order tracking.  
-✅ **Secure DevOps Pipeline** – CI/CD automation with security checks.  
-✅ **Optimized Deployment** – Uses containerization & cloud hosting.  
-✅ **React.js-Based Frontend** – Built with Create React App.  
-✅ **Production-Ready** – Includes build optimizations & best practices.  
-
-> This repo is a great **learning project** for those interested in **DevSecOps, CI/CD, and secure web app deployment**. 🚀
-
-🔗 **Read the detailed blog post:** [Zomato Clone - Secure Deployment with DevSecOps CI/CD](https://blog.prodevopsguytech.com/zomato-clone-secure-deployment-with-devsecops-cicd)  
-
-## 📸 **Project Screenshots**  
-
-| Home Page | Menu View | Checkout Page |  
-|-----------|----------|---------------|  
-| ![](https://miro.medium.com/v2/resize:fit:750/format:webp/1*xVxk3tSbk9yA6hel60t13g.png) | ![](https://miro.medium.com/v2/resize:fit:750/format:webp/1*KOwp6K2sOcSmDyk9Axnvhw.png) | ![](https://miro.medium.com/v2/resize:fit:750/format:webp/1*t1x_F_qwHI6anvRHS59OxA.png) |  
+This project follows **DevSecOps principles** by integrating security scanning into every stage of the CI/CD pipeline — shifting security left and catching vulnerabilities before production.
 
 ---
 
-## 🛠️ **Getting Started**  
+## 🛠️ Tech Stack
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).  
+| Category | Tools |
+|---|---|
+| CI/CD | Jenkins |
+| Security | SonarQube, OWASP Dependency Check, Trivy |
+| Containerization | Docker, DockerHub |
+| Cloud | AWS EC2 (Ubuntu 22.04) |
+| Application | ReactJS, NodeJS, NPM |
 
-### 🔧 **Prerequisites**  
+---
 
-Ensure you have **Node.js** and **npm** installed.  
+## 🚀 Architecture Workflow
 
-```sh
-node -v   # Check Node.js version
-npm -v    # Check npm version
+```
+Developer → GitHub → Jenkins Pipeline
+    → SonarQube Analysis
+    → Quality Gate
+    → OWASP Dependency Scan
+    → Trivy Filesystem Scan
+    → Docker Build & Push
+    → Trivy Image Scan
+    → Deploy Container (Port 3000)
 ```
 
-### 📦 **Installation**  
+---
 
-Clone the repository and install dependencies:  
+## 📂 Project Features
 
-```sh
-git clone https://github.com/your-repo/zomato-clone.git  
-cd zomato-clone  
-npm install  
+- ✅ Automated CI/CD Pipeline with Jenkins
+- ✅ Static Code Analysis using SonarQube
+- ✅ Dependency Vulnerability Scanning via OWASP Dependency Check
+- ✅ Filesystem & Image Security Scanning via Trivy
+- ✅ Docker Image Build & Push to DockerHub
+- ✅ Automated Container Deployment
+- ✅ Full DevSecOps Integration
+
+---
+
+## ⚙️ Prerequisites
+
+Ensure the following are available before setup:
+
+- AWS EC2 Ubuntu 22.04 Instance (T2 Large recommended)
+- Jenkins
+- Docker
+- Java 17 (Temurin)
+- NodeJS 16
+- SonarQube
+- Trivy
+- OWASP Dependency Check Plugin
+
+---
+
+## ☁️ AWS EC2 Setup
+
+### Launch EC2 Instance
+- **OS:** Ubuntu 22.04
+- **Type:** T2 Large
+
+### Open Inbound Ports
+
+| Port | Purpose |
+|---|---|
+| 22 | SSH |
+| 8080 | Jenkins |
+| 9000 | SonarQube |
+| 3000 | Application |
+
+---
+
+## 🔧 Jenkins Installation
+
+```bash
+sudo apt update -y
+
+wget -O - https://packages.adoptium.net/artifactory/api/gpg/key/public \
+  | tee /etc/apt/keyrings/adoptium.asc
+
+echo "deb [signed-by=/etc/apt/keyrings/adoptium.asc] \
+  https://packages.adoptium.net/artifactory/deb \
+  $(awk -F= '/^VERSION_CODENAME/{print$2}' /etc/os-release) main" \
+  | tee /etc/apt/sources.list.d/adoptium.list
+
+sudo apt update -y && sudo apt install temurin-17-jdk -y
+
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key \
+  | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/" \
+  | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt update -y && sudo apt install jenkins -y
+sudo systemctl start jenkins && sudo systemctl enable jenkins
 ```
 
-### 🚀 **Running the App**  
+**Access Jenkins:** `http://<EC2-PUBLIC-IP>:8080`
 
-Start the development server:  
-
-```sh
-npm start  
+```bash
+# Get initial admin password
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 
-🔗 Open [http://localhost:3000](http://localhost:3000) in your browser.  
-
 ---
 
-## 📜 **Available Scripts**  
+## 🐳 Docker Installation
 
-| Command | Description |  
-|---------|------------|  
-| `npm start` | Runs the app in development mode |  
-| `npm test` | Launches the test runner |  
-| `npm run build` | Builds the app for production |  
-| `npm run eject` | Ejects the default configuration (irreversible) |  
-
-For more details, check the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).  
-
----
-
-## 🚢 **Deployment**  
-
-### 🔥 **Build for Production**  
-
-```sh
-npm run build  
+```bash
+sudo apt update && sudo apt install docker.io -y
+sudo usermod -aG docker ubuntu
+newgrp docker
+sudo chmod 777 /var/run/docker.sock
+docker --version
 ```
 
-📂 The app is built in the `build/` folder, ready for deployment.  
+---
 
-### 🌍 **Hosting**  
+## 🔍 SonarQube Setup
 
-You can deploy this project on:  
+```bash
+docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+```
 
-- **Vercel** ([Docs](https://vercel.com/docs))  
-- **Netlify** ([Docs](https://docs.netlify.com/))  
-- **AWS Amplify** ([Docs](https://docs.aws.amazon.com/amplify/latest/userguide/welcome.html))  
+**Access:** `http://<EC2-PUBLIC-IP>:9000`  
+**Default credentials:** `admin / admin`
 
 ---
 
-## 📚 Learn More  
+## 🔐 Trivy Installation
 
-- 🏗️ [React Documentation](https://reactjs.org/)  
-- ⚡ [Code Splitting](https://facebook.github.io/create-react-app/docs/code-splitting)  
-- 🔍 [Analyzing Bundle Size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)  
-- 📲 [Making a Progressive Web App](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)  
+```bash
+sudo apt install wget apt-transport-https gnupg lsb-release -y
 
----
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key \
+  | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
 
-## 🤝 **Contributing**  
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] \
+  https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" \
+  | sudo tee -a /etc/apt/sources.list.d/trivy.list
 
-Contributions are welcome! If you'd like to improve this project, feel free to submit a pull request.  
-
----
-
-## **Hit the Star!** ⭐
-
-**If you find this repository helpful and plan to use it for learning, please give it a star. Your support is appreciated!**
+sudo apt update && sudo apt install trivy -y
+trivy --version
+```
 
 ---
 
-## 🛠️ **Author & Community**  
+## 🔌 Jenkins Plugins to Install
 
-This project is crafted by **[Harshhaa](https://github.com/NotHarshhaa)** 💡.  
-I’d love to hear your feedback! Feel free to share your thoughts.  
+Navigate to **Manage Jenkins → Plugins → Available** and install:
 
----
-
-### 📧 **Connect with me:**
-
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white)](https://linkedin.com/in/harshhaa-vardhan-reddy) [![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/NotHarshhaa)  [![Telegram](https://img.shields.io/badge/Telegram-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/prodevopsguy) [![Dev.to](https://img.shields.io/badge/Dev.to-0A0A0A?style=for-the-badge&logo=dev.to&logoColor=white)](https://dev.to/notharshhaa) [![Hashnode](https://img.shields.io/badge/Hashnode-2962FF?style=for-the-badge&logo=hashnode&logoColor=white)](https://hashnode.com/@prodevopsguy)  
-
----
-
-### 📢 **Stay Connected**  
-
-![Follow Me](https://imgur.com/2j7GSPs.png)
+- Eclipse Temurin Installer
+- SonarQube Scanner
+- NodeJS Plugin
+- OWASP Dependency Check
+- Docker Pipeline
+- Docker API Plugin
+- Docker Commons Plugin
 
 ---
 
-### 🎉 **Happy Coding!** 🚀  
+## ⚙️ Jenkins Global Tool Configuration
+
+Configure under **Manage Jenkins → Global Tool Configuration:**
+
+| Tool | Name |
+|---|---|
+| JDK | `jdk17` |
+| NodeJS | `node16` |
+| SonarQube Scanner | `sonar-scanner` |
+| Dependency-Check | `DP-Check` |
+
+---
+
+## 🔑 Jenkins Credentials to Add
+
+| ID | Type | Purpose |
+|---|---|---|
+| `sonar-token` | Secret Text | SonarQube authentication token |
+| `docker` | Username/Password | DockerHub credentials |
+
+---
+
+## 📜 Jenkins Pipeline
+
+```groovy
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk17'
+        nodejs 'node16'
+    }
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+
+    stages {
+
+        stage('Clean Workspace') {
+            steps { cleanWs() }
+        }
+
+        stage('Checkout from Git') {
+            steps {
+                git branch: 'main',
+                url: 'https://github.com/mudit097/Zomato-Clone.git'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectName=zomato \
+                    -Dsonar.projectKey=zomato
+                    '''
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                waitForQualityGate abortPipeline: false,
+                credentialsId: 'sonar-token'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps { sh 'npm install' }
+        }
+
+        stage('OWASP FS SCAN') {
+            steps {
+                dependencyCheck(
+                    additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit',
+                    odcInstallation: 'DP-Check'
+                )
+                dependencyCheckPublisher(
+                    pattern: '**/dependency-check-report.xml'
+                )
+            }
+        }
+
+        stage('TRIVY FS SCAN') {
+            steps {
+                sh 'trivy fs . > trivyfs.txt'
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+                        sh 'docker build -t zomato .'
+                        sh 'docker tag zomato yourdockerhub/zomato:latest'
+                        sh 'docker push yourdockerhub/zomato:latest'
+                    }
+                }
+            }
+        }
+
+        stage('TRIVY Image Scan') {
+            steps {
+                sh 'trivy image yourdockerhub/zomato:latest > trivy-image.txt'
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                sh '''
+                docker run -d \
+                  --name zomato \
+                  -p 3000:3000 \
+                  yourdockerhub/zomato:latest
+                '''
+            }
+        }
+    }
+}
+```
+
+---
+
+## 🧪 Pipeline Stages Explained
+
+| Stage | Purpose |
+|---|---|
+| Clean Workspace | Wipes Jenkins workspace for a fresh build |
+| Checkout | Pulls latest code from GitHub main branch |
+| SonarQube Analysis | Performs static code analysis for bugs & code smells |
+| Quality Gate | Validates SonarQube quality thresholds |
+| Install Dependencies | Runs `npm install` |
+| OWASP FS Scan | Scans dependencies for known CVE vulnerabilities |
+| Trivy FS Scan | Scans the filesystem for misconfigurations & vulnerabilities |
+| Docker Build & Push | Builds image and pushes to DockerHub |
+| Trivy Image Scan | Scans the Docker image before deployment |
+| Deploy Container | Runs the containerized app on port 3000 |
+
+---
+
+## 📊 Security Tools Summary
+
+| Tool | Layer | What It Catches |
+|---|---|---|
+| SonarQube | Code | Bugs, code smells, security hotspots |
+| OWASP Dependency Check | Dependencies | Known CVEs in npm packages |
+| Trivy (FS) | Filesystem | Misconfigurations, vulnerable libraries |
+| Trivy (Image) | Container | OS/package vulnerabilities in Docker image |
+
+---
+
+## 🌐 Application Access
+
+Once deployed:
+
+```
+http://<EC2-PUBLIC-IP>:3000
+```
+
+---
+
+## 📈 Benefits of This DevSecOps Approach
+
+- 🔒 Security integrated at every pipeline stage
+- 🐛 Early vulnerability detection before production
+- 🤖 Fully automated — no manual deployment steps
+- ⚡ Faster release cycles with consistent quality gates
+- 📋 Audit trail via scan reports (OWASP XML, Trivy TXT)
+
+---
+
+## 🔮 Future Enhancements
+
+- [ ] Kubernetes deployment with Helm charts
+- [ ] ArgoCD for GitOps-based continuous delivery
+- [ ] Terraform for infrastructure as code
+- [ ] Monitoring with Prometheus & Grafana
+- [ ] Slack/email notifications on pipeline failure
+- [ ] Upgrade to Node 18/20 and fix npm vulnerabilities
+
+---
+
+## 👨‍💻 Author
+
+**Prasanna Waghmare**  
+DevOps Engineer | Cloud & Automation
+
+---
+
+## ⭐ Conclusion
+
+This project is a hands-on implementation of DevSecOps principles using industry-standard tools. By automating security scanning at every layer — code, dependencies, filesystem, and container — it ensures vulnerabilities are caught early, reducing risk and improving the overall reliability of the software delivery lifecycle.
