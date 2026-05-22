@@ -371,3 +371,4 @@ DevOps Engineer | Cloud & Automation
 ## ⭐ Conclusion
 
 This project is a hands-on implementation of DevSecOps principles using industry-standard tools. By automating security scanning at every layer — code, dependencies, filesystem, and container — it ensures vulnerabilities are caught early, reducing risk and improving the overall reliability of the software delivery lifecycle.
+if needed visit --> https://blog.prodevopsguytech.com/zomato-clone-secure-deployment-with-devsecops-cicd#heading-step-3-install-plugins-like-jdk-sonarqube-scanner-nodejs-owasp-dependency-check
