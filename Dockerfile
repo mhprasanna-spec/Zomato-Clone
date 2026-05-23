@@ -1,10 +1,10 @@
 # -------- Build Stage --------
-FROM node:16-alpine AS builder
+FROM node:16-bullseye AS builder
 
 # Set working directory
 WORKDIR /app
 
-# Copy dependency files
+# Copy package files
 COPY package*.json ./
 
 # Install dependencies
@@ -13,26 +13,23 @@ RUN npm install --legacy-peer-deps
 # Copy source code
 COPY . .
 
-# Skip CRA preflight checks
+# Skip React dependency validation
 ENV SKIP_PREFLIGHT_CHECK=true
 
-# Fix OpenSSL issue for old React/Webpack apps
-ENV NODE_OPTIONS=--openssl-legacy-provider
-
-# Build app
+# Build application
 RUN npm run build
 
 # -------- Production Stage --------
-FROM node:16-alpine
+FROM node:16-bullseye
 
 # Set working directory
 WORKDIR /app
 
-# Copy files from builder
+# Copy built app
 COPY --from=builder /app .
 
-# Expose port
+# Expose app port
 EXPOSE 3000
 
-# Start application
+# Start app
 CMD ["npm", "start"]
