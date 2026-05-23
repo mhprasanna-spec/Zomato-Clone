@@ -1,35 +1,37 @@
 # -------- Build Stage --------
-# Use official Node.js LTS Alpine image
-FROM node:18-alpine AS builder
+FROM node:16-alpine AS builder
 
 # Set working directory
 WORKDIR /app
 
-# Copy dependency files first for better Docker caching
+# Copy dependency files
 COPY package*.json ./
 
-# Install dependencies with legacy peer deps support
+# Install dependencies
 RUN npm install --legacy-peer-deps
 
-# Copy application source code
+# Copy source code
 COPY . .
 
-# Skip React preflight dependency checks
+# Skip CRA preflight checks
 ENV SKIP_PREFLIGHT_CHECK=true
 
-# Build React application
+# Fix OpenSSL issue for old React/Webpack apps
+ENV NODE_OPTIONS=--openssl-legacy-provider
+
+# Build app
 RUN npm run build
 
 # -------- Production Stage --------
-FROM node:18-alpine
+FROM node:16-alpine
 
 # Set working directory
 WORKDIR /app
 
-# Copy all files from builder stage
+# Copy files from builder
 COPY --from=builder /app .
 
-# Expose application port
+# Expose port
 EXPOSE 3000
 
 # Start application
